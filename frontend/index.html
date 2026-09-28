@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARTESANATOS DE RUA BRASIL</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}body{margin:0;background:#f2f0ec;scroll-behavior:smooth}
+.header{background:#1a7a3e;color:white;padding:25px 20px;text-align:center}
+.header img{width:140px;height:140px;border-radius:50%;background:white;padding:4px;border:3px solid #fff;object-fit:contain}
+.header h1{margin:15px 0 5px;font-size:26px}
+.sub{color:#c8e6c9;font-size:14px}
+.menu{background:#fff;padding:12px;display:flex;justify-content:center;gap:30px;font-weight:bold;color:#0d4a26;border-bottom:2px solid #e0e0e0;position:sticky;top:0;z-index:10}
+.menu a{color:#0d4a26;text-decoration:none;cursor:pointer}
+.topbar{background:white;padding:12px 15px;max-width:1100px;margin:10px auto;border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:13px;color:#0d4a26;font-weight:bold}
+.grid{max-width:1100px;margin:20px auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px;padding:0 15px}
+.card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.15);text-align:center;padding-bottom:12px;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-5px)}
+.card img{width:100%;height:220px;object-fit:contain;background:white;padding:5px}
+.card h3{margin:10px 0 5px;color:#2d4a1a;font-size:16px;padding:0 10px;height:40px;overflow:hidden}
+.card.preco{color:#5a8f2a;font-weight:bold;margin:5px 0}
+.card.desc{font-size:12px;color:#39FF14;padding:0 10px;height:35px;overflow:hidden;font-weight:bold}
+.btn{background:#5a8f2a;color:white;border:none;padding:10px;width:90%;border-radius:8px;margin:8px 0;cursor:pointer;font-weight:bold}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999;padding:15px}
+.modal.open{display:flex}
+.modal-box{position:relative;background:#0a0a0a;width:550px;max-width:95%;max-height:90vh;border-radius:12px;display:flex;flex-direction:column;overflow-y:auto;border:1px solid #333}
+.fechar{position:sticky;top:0;align-self:flex-end;z-index:99;background:#fff;color:#000;border:none;padding:8px 14px;margin:8px;border-radius:6px;cursor:pointer;font-weight:bold}
+.modal-img{width:100%!important;height:auto!important;max-height:500px!important;object-fit:contain!important;background:#000;display:block!important}
+.thumbs{width:100%;display:flex!important;gap:10px;justify-content:center;padding:12px;background:#111}
+.thumbs img{width:70px;height:70px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent}
+.thumbs img.ativo{border-color:#99FF14}
+.modal-info{width:100%;padding:15px;background:#0a0a0a}
+.modal-info h2{color:#fff;font-size:22px;margin:0}
+.preco2{color:#99FF14;font-size:20px;font-weight:bold;margin:8px 0}
+.modal-info p{color:#b026ff!important;font-weight:700;white-space:pre-wrap}
+.btnZap{background:#25D366;color:#fff;border:none;padding:12px;border-radius:8px;font-weight:bold;width:100%;margin-top:10px;cursor:pointer}
+.contato-box.info{flex:1;min-width:280px;background:white;color:#0d4a26;padding:25px;border-radius:12px}
+.contato-box.info h3{color:#1a7a3e}
+.contato-box.info a{color:#1a7a3e;font-weight:bold;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="logo.png" alt="logo">
+  <h1>ARTESANATOS DE RUA BRASIL</h1>
+  <div class="sub">Feito à mão • Feito nas ruas • Feito com alma</div>
+</div>
+<div class="menu">
+  <a href="#">INÍCIO</a>
+  <a href="#loja">PRODUTOS</a>
+  <a href="#sobre">SOBRE</a>
+  <a href="#contato">CONTATO</a>
+</div>
+<div class="topbar">
+  <span>📧 Guedesferraoedsonsolemar@gmail.com | 📱 (11) 93944-0046 | 📍 Brasil</span>
+  <a href="/admin.html" style="background:#5a8f2a;color:white;padding:8px 14px;border-radius:8px;text-decoration:none;">Admin</a>
+</div>
+
+<div class="grid" id="loja">Carregando...</div>
+
+<!-- SOBRE NÓS -->
+<div class="secao" id="sobre">
+  <h2>SOBRE NÓS</h2>
+  <p>
+    Somos a <b>Artesanatos de Rua Brasil</b>, um projeto que nasce nas ruas, com as mãos e com a alma.<br><br>
+    Nós fazemos artesanato de verdade, usando as coisas da natureza, sementes, madeiras, pedras, e também trabalhamos com reciclagem, transformando o que seria lixo em arte.<br><br>
+    Cada peça é única, feita à mão com muito carinho e respeito pela natureza.<br><br>
+    <b>ACEITAMOS ENCOMENDAS!</b><br>
+    Você quer fazer um vaso diferente? Quer fazer uma decoração no seu próprio trabalho, no seu instrumento musical, no seu espaço? A gente faz! É só chamar no WhatsApp e falar sua ideia que a gente cria junto com você.
+  </p>
+</div>
+
+<!-- CONTATO -->
+<div class="secao" id="contato">
+  <h2>CONTATO</h2>
+  <div class="contato-box">
+    <img src="logo.png" style="width:180px;height:180px;border-radius:50%;background:white;padding:5px;border:4px solid white;object-fit:contain">
+    <div class="info">
+      <h3>🟢 Artesanatos de Rua Brasil</h3>
+      <p>📧 <b>E-mail:</b><br>Guedesferraoedsonsolemar@gmail.com</p>
+      <p>📱 <b>WhatsApp:</b><br>(11) 93944-0046</p>
+      <p>📍 <b>Local:</b><br>Atendemos todo o Brasil - Feito com muita consciência, enviado com amor</p>
+      <button class="btnZap" onclick="window.open('https://wa.me/5511939440046?text=Olá! Vi seu site Artesanatos de Rua Brasil e quero fazer uma encomenda','_blank')">💬 Falar no WhatsApp agora</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target==this)fecharModal()">
+  <div class="modal-box">
+    <div class="modal-img">
+      <button class="fechar" onclick="fecharModal()">✕ Fechar</button>
+      <img id="mMain" class="main" src="">
+      <div class="thumbs" id="mThumbs"></div>
+    </div>
+    <div class="modal-info">
+      <h2 id="mNome"></h2>
+      <div class="preco2" id="mPreco"></div>
+      <p id="mDesc"></p>
+      <button class="btnZap" onclick="comprarZap()">💬 Comprar no WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let produtosGlobal = []; let produtoAtual = null;
+async function carregar(){
+  try{
+    let r = await fetch('http://localhost:8080/api/produtos');
+    let produtos = await r.json(); produtosGlobal = produtos;
+    let html = '';
+    produtos.forEach((p,i)=>{
+      let img1 = p.imagem || p.foto1 || p.imagem1 || p.img1 || p.url || 'https://via.placeholder.com/300';
+      let desc = p.descricao || p.desc || '';
+      html += `<div class="card" onclick="abrirModal(${i})">
+        <img src="${img1}"><h3>${p.nome}</h3><div class="preco">R$ ${p.preco}</div>
+        <div class="desc">${desc.substring(0,60)}...</div><button class="btn">Ver detalhes</button></div>`;
+    });
+    document.getElementById('loja').innerHTML = html || 'Nenhum produto';
+  }catch(e){ document.getElementById('loja').innerHTML = 'Erro backend desligado';}
+}
+function abrirModal(i){
+  let p = produtosGlobal[i]; produtoAtual = p;
+  let img1 = p.imagem || p.foto1 || p.imagem1 || p.img1 || p.url || '';
+  let img2 = p.imagem2 || p.foto2 || p.img2 || ''; let img3 = p.imagem3 || p.foto3 || p.img3 || '';
+  let imgs = [img1, img2, img3].filter(x=>x);
+  document.getElementById('mNome').innerText = p.nome;
+  document.getElementById('mPreco').innerText = 'R$ ' + p.preco;
+  document.getElementById('mDesc').innerText = p.descricao || p.desc || 'Sem descrição';
+  document.getElementById('mMain').src = imgs[0] || '';
+  let thumbsHtml = ''; imgs.forEach((im, idx)=>{ thumbsHtml += `<img src="${im}" class="${idx==0?'ativo':''}" onclick="trocarFoto('${im}',this)">`; });
+  document.getElementById('mThumbs').innerHTML = thumbsHtml;
+  document.getElementById('modal').classList.add('open');
+}
+function trocarFoto(src, el){ document.getElementById('mMain').src = src; document.querySelectorAll('.thumbs img').forEach(x=>x.classList.remove('ativo')); el.classList.add('ativo'); }
+function fecharModal(){ document.getElementById('modal').classList.remove('open'); }
+function comprarZap(){ let msg = `Olá! Quero comprar: ${produtoAtual.nome} - R$ ${produtoAtual.preco}`; window.open(`https://wa.me/5511939440046?text=${encodeURIComponent(msg)}`,'_blank'); }
+carregar();
+</script>
+</body>
+</html>

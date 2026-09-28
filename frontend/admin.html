@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Gestão Artesanato - PRO</title>
+<style>
+body{font-family:Arial;background:#f2f2f2;margin:0;padding:20px}
+.box{background:white;padding:15px;border-radius:10px;max-width:900px;margin:auto}
+input,select,button{padding:10px;width:100%;margin:5px 0;border-radius:8px;border:1px solid #ccc}
+button{background:#25D366;color:white;font-weight:bold;cursor:pointer;border:none}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px;margin-top:20px}
+.card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.15);position:relative}
+.card img{width:100%;height:180px;object-fit:contain;background:white}
+.card-body{padding:10px}
+.nome{font-weight:bold}
+.badge{background:#eee;padding:2px 6px;border-radius:5px;font-size:12px}
+.preco{color:#25D366;font-weight:bold;margin-top:5px}
+.lucro{color:green;font-size:13px}
+.x{position:absolute;top:5px;right:8px;background:red;color:white;border-radius:50%;width:22px;height:22px;text-align:center;cursor:pointer;line-height:22px}
+#preview{width:100%;max-height:200px;object-fit:contain;display:none;border-radius:8px;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>Gestão Artesanato - PRO</h2>
+<input id="nome" placeholder="Nome do produto">
+<input id="categoria" placeholder="Categoria ex: Kuripe, Colar">
+<input id="preco" type="number" placeholder="Preço de venda">
+<input id="custo" type="number" placeholder="Custo">
+<input id="qtd" type="number" placeholder="Quantidade" value="1">
+<input id="foto" type="file" accept="image/*">
+<img id="preview">
+<input id="foto2" type="file" accept="image/*">
+<img id="preview2" style="width:100%;max-height:200px;object-fit:contain;display:none;border-radius:8px;margin-top:5px;background:white">
+<input id="foto3" type="file" accept="image/*">
+<img id="preview3" style="width:100%;max-height:200px;object-fit:contain;display:none;border-radius:8px;margin-top:5px;background:white">
+<textarea id="descricao" placeholder="Descrição do produto"></textarea>
+<button onclick="salvar()">Salvar Produto</button>
+
+<input id="busca" onkeyup="filtrar()" placeholder="🔍 Pesquisar por nome ou categoria..." style="margin-top:20px">
+
+<div id="grid"></div>
+</div>
+
+<script>
+let produtos = [];
+let imagemUrl = '';
+const preview = document.getElementById('preview');
+const preview2 = document.getElementById('preview2');
+const preview3 = document.getElementById('preview3');
+let imagemUrl2 = '';
+let imagemUrl3 = '';
+
+document.getElementById('foto').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  preview.src = URL.createObjectURL(file);
+  preview.style.display='block';
+  const fd = new FormData();
+  fd.append('foto', file);
+  const res = await fetch('/api/upload',{method:'POST',body:fd}).then(r=>r.json());
+  imagemUrl = res.url;
+});
+document.getElementById('foto2').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  preview2.src = URL.createObjectURL(file);
+  preview2.style.display='block';
+  const fd = new FormData(); fd.append('foto', file);
+  const res = await fetch('/api/upload',{method:'POST',body:fd}).then(r=>r.json());
+  imagemUrl2 = res.url;
+});
+document.getElementById('foto3').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  preview3.src = URL.createObjectURL(file);
+  preview3.style.display='block';
+  const fd = new FormData(); fd.append('foto', file);
+  const res = await fetch('/api/upload',{method:'POST',body:fd}).then(r=>r.json());
+  imagemUrl3 = res.url;
+});
+
+async function salvar(){
+  const nome = document.getElementById('nome');
+  const preco = document.getElementById('preco');
+  if(!nome.value ||!preco.value){ alert('Coloca nome e preço'); return; }
+
+  await fetch('/api/produtos',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      nome:nome.value,
+      categoria:document.getElementById('categoria').value || 'Outros',
+      preco:preco.value,
+      custo:document.getElementById('custo').value||0,
+      quantidade:document.getElementById('qtd').value||1,
+imagem:imagemUrl,
+imagem2:imagemUrl2,
+imagem3:imagemUrl3,
+descricao:document.getElementById('descricao').value||'',
+    })
+  });
+
+  document.getElementById('qtd').value='1'; document.getElementById('descricao').value=''; imagemUrl=''; imagemUrl2=''; imagemUrl3=''; preview.style.display='none'; preview2.style.display='none'; preview3.style.display='none';
+  carregar();
+}
+
+function carregar(){
+  fetch('/api/produtos').then(r=>r.json()).then(d=>{
+    produtos = d;
+    render(d);
+  });
+}
+
+function render(lista){
+  document.getElementById('grid').innerHTML = lista.map(p=>`
+    <div class="card">
+      <div class="x" onclick="deletar(${p.id})">x</div>
+      <img src="${p.imagem || ''}" onerror="this.src='https://via.placeholder.com/200'">
+      <div class="card-body">
+        <div class="nome">${p.nome}</div>
+        <div class="badge">${p.categoria} • ${p.quantidade} un</div>
+        <div class="preco">R$ ${parseFloat(p.preco).toFixed(2)}</div>
+        <div class="lucro">Lucro: R$ ${(p.preco - (p.custo||0)).toFixed(2)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filtrar(){
+  const termo = document.getElementById('busca').value.toLowerCase().trim();
+  if(!termo) return render(produtos);
+  const f = produtos.filter(p => (p.nome||'').toLowerCase().includes(termo) || (p.categoria||'').toLowerCase().includes(termo));
+  render(f);
+}
+
+async function deletar(id){
+  if(!confirm('Apagar?')) return;
+  await fetch('/api/produtos/'+id,{method:'DELETE'});
+  carregar();
+}
+
+carregar();
+</script>
+</body>
+</html>
