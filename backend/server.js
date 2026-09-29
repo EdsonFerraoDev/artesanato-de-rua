@@ -35,7 +35,9 @@ const db = mysql.createConnection({
 
 db.connect(err=>{
   if(err) throw err;
-  console.log('Conectado no artesanatos de rua');
+  console.log('Conectado no artesanatos de rua - TESTE NOVO');
+  console.log('USER:',process.env.DB_USER);
+  console.log('HOST:',process.env.DB_HOST);
 });
 
 // SERVIR O FRONTEND - ESSA ERA A PARTE QUE FALTAVA
