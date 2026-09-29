@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -10,8 +11,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
-
+// cria pasta uploads se não existir
+if (!fs.existsSync(path.join(__dirname, 'uploads'))) {
+  fs.mkdirSync(path.join(__dirname, 'uploads'));
+}
+if (!fs.existsSync(path.join(__dirname, 'frontend', 'uploads'))) {
+  try { fs.mkdirSync(path.join(__dirname, 'frontend', 'uploads')); } catch(e) {}
+}
 
 const storage = multer.diskStorage({
   destination: (req,file,cb)=>cb(null,'uploads/'),
@@ -22,52 +28,35 @@ const upload = multer({storage});
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '333405',
+  password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'artesanatos_de_rua',
   port: process.env.DB_PORT || 3306
 });
 
 db.connect(err=>{
   if(err) throw err;
-  console.log('Conectado no artesanatos_de_rua');
+  console.log('Conectado no artesanatos de rua');
 });
 
-app.use(express.static(path.join(__dirname, '../frontend')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-app.post('/api/upload', upload.single('foto'), (req,res)=>{
-  res.json({url:'/uploads/'+req.file.filename});
-});
-
-app.post('/api/produtos', (req,res)=>{
-  const {nome,categoria,preco,custo,quantidade,imagem,imagem2,imagem3,descricao} = req.body;
-  db.query('INSERT INTO artesanato (nome,categoria,preco,custo,quantidade,imagem,imagem2,imagem3,descricao) VALUES (?,?,?,?,?,?,?,?,?)',
-  [nome,categoria,preco,custo,quantidade,imagem,imagem2,imagem3,descricao],
-  (err)=>{
-    if(err) return res.status(500).json(err);
-    res.json({ok:true});
-  });
-});
-
-app.get('/api/produtos', (req,res)=>{
-  db.query('SELECT *, (preco - custo) as lucro, (preco - custo)*quantidade as lucro_total FROM artesanato ORDER BY id DESC', (err, results)=>{
-    if(err) return res.status(500).json(err);
-    res.json(results);
-  });
-});
-
-app.delete('/api/produtos/:id', (req,res)=>{
-  db.query('DELETE FROM artesanato WHERE id=?', [req.params.id], (err)=>{
-    if(err) return res.status(500).json(err);
-    res.json({ok:true});
-  });
-});
-
-const path = require('path');
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// SERVIR O FRONTEND - ESSA ERA A PARTE QUE FALTAVA
 app.use(express.static(path.join(__dirname, 'frontend')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/index.html'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'frontend', 'uploads')));
+
+// SUAS ROTAS DA API (mantenha as que você já tem)
+// Exemplo:
+app.get('/api/produtos', (req, res) => {
+  db.query('SELECT * FROM produtos', (err, result) => {
+    if(err) return res.status(500).json(err);
+    res.json(result);
+  });
 });
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log('Loja no ar na porta ' + PORT));
+
+// IMPORTANTE: essa rota tem que ser a ÚLTIMA de todas
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+  });
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
