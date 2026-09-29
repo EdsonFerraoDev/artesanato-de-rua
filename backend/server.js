@@ -64,15 +64,10 @@ app.delete('/api/produtos/:id', (req,res)=>{
 });
 
 const path = require('path');
-
-// fotos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// site - como seu frontend tá DENTRO do backend, é frontend/dist
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
+app.use(express.static(path.join(__dirname, 'frontend')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+  res.sendFile(path.join(__dirname, 'frontend/index.html'));
 });
-
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Loja PRO rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log('Loja no ar na porta ' + PORT));
