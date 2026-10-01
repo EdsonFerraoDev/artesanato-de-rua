@@ -10,6 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 // cria pasta uploads se não existir
 if (!fs.existsSync(path.join(__dirname, 'uploads'))) {
